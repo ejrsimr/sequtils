@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # ejr - 20161029
 # Rewrite of fastatools in python
 # This runs much faster with pypy

@@ -1,11 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # search through fasta file for regular expression and output either a bed file or fasta file
 # ejr: 2022-09-27
 # INPUT: 
 #   FASTA FILE
 #   regular expression
 # OUTPUT:
-# BED file of matches or FASTA file of matches
+# BED file of matches
 
 ### IMPORT ####################################################################
 import sys
