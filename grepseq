@@ -35,9 +35,9 @@ def grep_regex(fasta, regex):
 
 # reverse complement sequences
 def reverse_complement(seq):
-    '''Return reverse complement of seq'''
+    # complement sequence
     bases = str.maketrans('AGCTagct','TCGAtcga')
-    # translate it, reverse, return
+    # reverse sequences; return
     return seq.translate(bases)[::-1]
 
 # Read in FASTA file from STDIN
