@@ -3,7 +3,7 @@
 # last update: 2022-10-12
 # Rewrite of fastatools in python
 # This runs much faster with pypy
-# INPUT: FASTA file on STDIN or with --filedsfa
+# INPUT: FASTA file on STDIN or with --file
 # OUTPUT: varies, depending on options.  FASTA, table or histogram
 
 ###############################################################################
