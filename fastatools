@@ -12,6 +12,7 @@
 import sys
 import argparse
 import re
+import signal
 
 ###############################################################################
 ### MAIN ######################################################################
@@ -301,4 +302,7 @@ def print_gc_table(fasta):
 ### RUN MAIN ##################################################################
 ###############################################################################
 if __name__ == "__main__":
+
+    # this catches sigpipe errors so you don't get an error message if you tail of head output
+    signal.signal(signal.SIGPIPE, signal.SIG_DFL)
     main()
