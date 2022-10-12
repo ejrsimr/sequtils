@@ -9,10 +9,6 @@ def main():
     fasta = read_table(sys.stdin)
     print_fasta(fasta)
 
-    
-
-   
-
 # READ FASTA FROM STDIN
 def read_table(filename):
     header = ""
