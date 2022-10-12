@@ -9,7 +9,7 @@ def main():
     fasta = read_table(sys.stdin)
     print_fasta(fasta)
 
-# READ FASTA FROM STDIN
+# READ sequences table ROM STDIN (e.g. seqname\tsequence)
 def read_table(filename):
     header = ""
     fasta = {}
@@ -21,7 +21,7 @@ def read_table(filename):
 
     return fasta
 
-# INSERT NEW LINES
+# INSERT NEW LINES (for properly formatting fasta output)
 def insert_newlines(string, every=80):
     lines = []
 
@@ -39,6 +39,7 @@ def print_fasta(fasta):
 # RUN MAIN 
 if __name__ == "__main__":
 
+     # this catches sigpipe errors so you don't get an error message if you tail of head output
     signal.signal(signal.SIGPIPE, signal.SIG_DFL)
     
     main()

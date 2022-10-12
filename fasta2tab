@@ -37,6 +37,7 @@ def print_fasta(fasta):
 
 # RUN MAIN 
 if __name__ == "__main__":
+    # this catches sigpipe errors so you don't get an error message if you tail of head output
     signal.signal(signal.SIGPIPE, signal.SIG_DFL)
     
     main()
