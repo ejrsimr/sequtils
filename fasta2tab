@@ -2,6 +2,7 @@
 # fasta2tab
 # ejr: 2022-10-12
 import sys
+import signal
 
 # MAIN
 def main():
@@ -35,4 +36,6 @@ def print_fasta(fasta):
 
 # RUN MAIN 
 if __name__ == "__main__":
+    signal.signal(signal.SIGPIPE, signal.SIG_DFL)
+    
     main()
