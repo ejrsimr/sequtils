@@ -27,7 +27,7 @@ def main():
             # revcom the left end of window (cheaper than rc on window)
             left_rc = rc(seq[i:i+min_itr])
             # for the 4k window downstream of location
-            for ii in range(i+min_itr,i+window_size-min_itr-1):
+            for ii in range(i+min_itr,i+window_size-min_itr-10):
                 score = get_score(left_rc, seq[ii:ii+min_itr])
                 if score > min_score:
                     print("\t".join((header, str(i), str(ii+min_itr), seq[i:i+min_itr], str(score), ".")))
