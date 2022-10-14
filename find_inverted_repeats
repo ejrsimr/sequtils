@@ -23,7 +23,7 @@ def main():
     ## if there is a match return seq, score, position
     for header in fasta:
         seq = fasta[header]
-        for i in range(len(seq)-4000):
+        for i in range(len(seq)-window_size):
             # revcom the left end of window (cheaper than rc on window)
             left_rc = rc(seq[i:i+min_itr])
             # for the 4k window downstream of location
