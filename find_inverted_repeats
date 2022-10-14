@@ -23,11 +23,19 @@ def main():
     ## if there is a match return seq, score, position
     for header in fasta:
         seq = fasta[header]
-        for i in range(len(seq)-window_size):
+
+        for i in range(len(seq)-min_itr):
             # revcom the left end of window (cheaper than rc on window)
             left_rc = rc(seq[i:i+min_itr])
-            # for the 4k window downstream of location
-            for ii in range(i+min_itr,i+window_size-min_itr):
+
+            # if remainign sequence is shorter than window just use what remains
+            if window_size > len(seq) - (i + min_itr):
+                range_end = len(seq) - (i + min-itr)
+            else:
+                range_end = i+window_size-min_itr
+
+            for ii in range(i+min_itr,range_end):
+                # do we only want best score?
                 score = get_score(left_rc, seq[ii:ii+min_itr])
                 if score > min_score:
                     print("\t".join((header, str(i), str(ii+min_itr), seq[i:i+min_itr], str(score), ".")))
