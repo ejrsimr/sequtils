@@ -7,7 +7,7 @@
 import sys
 import signal
 import string
-window_size = 4000
+window_size = 1000
 min_itr = 16
 min_score = 14
 
