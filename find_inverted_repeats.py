@@ -63,9 +63,10 @@ def rc(seq):
 def get_score(seq1, seq2):
     score = 0
  
+    print(seq1, seq2)
     # Traverse the string 1 char by char
-    for i in range(len(seq1)) :
-        if seq1[i] == seq2[i] :
+    for i in range(len(seq1)):
+        if seq1[i] == seq2[i]:
             score += 1;
 
     return(score)
