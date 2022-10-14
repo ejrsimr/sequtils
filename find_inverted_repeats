@@ -30,7 +30,7 @@ def main():
 
             # if remainign sequence is shorter than window just use what remains
             if window_size > len(seq) - (i + min_itr):
-                range_end = len(seq) - (i + min-itr)
+                range_end = len(seq) - (i + min_itr)
             else:
                 range_end = i+window_size-min_itr
 
