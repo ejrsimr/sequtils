@@ -65,7 +65,6 @@ def read_fasta(filename):
             fasta[header] = []
         else:
             fasta[header].append(line)
-
     for header in fasta:
         fasta[header] = ''.join(fasta[header])
 

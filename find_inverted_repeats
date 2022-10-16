@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 # ejr: 2022-10-13
 # INPUT = FASTA
-# OUTPUT = bed file of inverted termianl repeats.
-# name = repeat
-# score = num matches between pair
+# OUTPUT = bed file of inverted termianl repeats with sequences and score
+# minsize?
 import sys
-import signal
 import string
-window_size = 1000
-min_itr = 16
-min_score = 14
+window_size = 3000
+min_itr = 21
+min_score = 16
 
 # MAIN
 def main():
@@ -19,27 +17,27 @@ def main():
     with open(filename) as my_file:
         fasta = read_fasta(my_file)
 
-    ## for each seq search for inverted repeat <= 4k upstream
-    ## if there is a match return seq, score, position
+    ## iterate over windows in each fasta sequences
     for header in fasta:
         seq = fasta[header]
+        # iterate over windows
 
         for i in range(len(seq)-min_itr):
-            # revcom the left end of window (cheaper than rc on window)
+            # rc the left end of window (cheaper than rc on window)
             left_rc = rc(seq[i:i+min_itr])
 
-            # if remainign sequence is shorter than window just use what remains
+            # if remaining sequence is shorter than window just use what remains
             if window_size > len(seq) - (i + min_itr):
-                range_end = len(seq) - (i + min_itr)
+                range_end = len(seq) - (i + min_itr) +1
             else:
-                range_end = i+window_size-min_itr
+                range_end = i+window_size-min_itr+1
 
             for ii in range(i+min_itr,range_end):
                 # do we only want best score?
                 score = get_score(left_rc, seq[ii:ii+min_itr])
-                if score > min_score:
-                    print("\t".join((header, str(i), str(ii+min_itr), seq[i:i+min_itr], str(score), ".")))
-
+                if score >= min_score:
+                    # +1 is because bed is 1 based
+                    print("\t".join((header, str(i), str(ii+min_itr+1), seq[i:i+min_itr], str(score), ".")))
 
 # READ IN FASTA
 def read_fasta(filename):
@@ -61,16 +59,13 @@ def read_fasta(filename):
 
 # reverse complement sequences
 def rc(seq):
-
     complements = seq.maketrans('ATGCatgc', 'TACGtacg')
     rcseq = seq.translate(complements)[::-1]
     return rcseq
 
-
 # count number of identical seqs
 def get_score(seq1, seq2):
     score = 0
- 
     # Traverse the string 1 char by char
     for i in range(len(seq1)):
         if seq1[i] == seq2[i]:
@@ -78,10 +73,6 @@ def get_score(seq1, seq2):
 
     return(score)
 
-
 # MAIN
 if __name__ == "__main__":
-
-    # this catches sigpipe errors so you don't get an error message if you tail of head output
-    signal.signal(signal.SIGPIPE, signal.SIG_DFL)
     main()
