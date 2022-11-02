@@ -2,7 +2,8 @@
 # ejr: 2022-10-13
 # INPUT = FASTA
 # OUTPUT = bed file of inverted terminal repeats with sequences and score
-# minsize?
+#  when the repeat is longer than the min_itr I get adjacent sequences.
+# what is the best way to merge them?
 import sys
 import string
 from joblib import Parallel, delayed
@@ -27,9 +28,10 @@ def main():
         ## iterate over windows in each fasta sequences
         bed_out = Parallel(n_jobs=num_cores)(delayed(find_itr)(header, fasta) for header in fasta )
     
-    for i in bed_out:
-        for ii in bed_out[i]:
-            print(ii)
+    # unwrap list of lists
+    for header in bed_out:
+        for itr in header:
+            print(itr)
 
 # find itr in one sequence at a time
 def find_itr(header, fasta):
@@ -55,7 +57,6 @@ def find_itr(header, fasta):
                 if score >= min_score:
                     # +1 is because bed is 1 based
                     bed_out.append("\t".join((header, str(i), str(ii+min_itr+1), seq[i:i+min_itr], str(score), ".")))
-
     return(bed_out)
 
 # READ IN FASTA
