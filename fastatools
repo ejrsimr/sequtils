@@ -45,7 +45,7 @@ def main():
         fasta_out = filter_fasta(fasta, args.len_min, args.len_max, args.gc_min, args.gc_max)
         print_fasta(fasta_out)
     else:
-        print("Something went wrong, this shouldn't happen")
+        print("Something went wrong, this shouldn't happen, did you leave off --filter")
 
 ###############################################################################
 ### SUBROUTINES ###############################################################

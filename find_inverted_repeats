@@ -1,13 +1,21 @@
 #!/usr/bin/env python3
 # ejr: 2022-10-13
 # INPUT = FASTA
-# OUTPUT = bed file of inverted termianl repeats with sequences and score
+# OUTPUT = bed file of inverted terminal repeats with sequences and score
 # minsize?
 import sys
 import string
-window_size = 3000
+from joblib import Parallel, delayed
+import multiprocessing
+
+window_size = 2500
 min_itr = 21
-min_score = 16
+min_score = 15
+# min size is the minimum distance the ITRs must be apart
+min_size = 250
+min_gc = .1
+# this isn't smart enough to split sequences, so you can only use as many core as there are seqs in fasta file
+num_cores = 4
 
 # MAIN
 def main():
@@ -16,16 +24,25 @@ def main():
     ## Open FASTA file
     with open(filename) as my_file:
         fasta = read_fasta(my_file)
+        ## iterate over windows in each fasta sequences
+        bed_out = Parallel(n_jobs=num_cores)(delayed(find_itr)(header, fasta) for header in fasta )
+    
+    for i in bed_out:
+        for ii in bed_out[i]:
+            print(ii)
 
-    ## iterate over windows in each fasta sequences
-    for header in fasta:
-        seq = fasta[header]
-        # iterate over windows
+# find itr in one sequence at a time
+def find_itr(header, fasta):
+    bed_out = []
+    seq = fasta[header]
+    # iterate over windows
 
-        for i in range(len(seq)-min_itr):
-            # rc the left end of window (cheaper than rc on window)
-            left_rc = rc(seq[i:i+min_itr])
-
+    for i in range(min_size, len(seq)-min_itr):
+        # rc the left end of window (cheaper than rc on window)
+        left_rc = rc(seq[i:i+min_itr])
+        gc = perc_gc(left_rc)
+        if gc > min_gc:
+                
             # if remaining sequence is shorter than window just use what remains
             if window_size > len(seq) - (i + min_itr):
                 range_end = len(seq) - (i + min_itr) +1
@@ -37,14 +54,16 @@ def main():
                 score = get_score(left_rc, seq[ii:ii+min_itr])
                 if score >= min_score:
                     # +1 is because bed is 1 based
-                    print("\t".join((header, str(i), str(ii+min_itr+1), seq[i:i+min_itr], str(score), ".")))
+                    bed_out.append("\t".join((header, str(i), str(ii+min_itr+1), seq[i:i+min_itr], str(score), ".")))
+
+    return(bed_out)
 
 # READ IN FASTA
-def read_fasta(filename):
+def read_fasta(fh):
     header = ""
     fasta = {}
 
-    for line in filename:
+    for line in fh:
         line = line.rstrip()
         if (line[0] == ">"):
             header = line[1:]
@@ -63,7 +82,12 @@ def rc(seq):
     rcseq = seq.translate(complements)[::-1]
     return rcseq
 
-# count number of identical seqs
+# get GC content of sequence
+def perc_gc(seq):
+    gc = (seq.count("G") + seq.count("C"))/ float(len(seq))
+    return gc
+
+# count number of identical nt
 def get_score(seq1, seq2):
     score = 0
     # Traverse the string 1 char by char
