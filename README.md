@@ -1,6 +1,11 @@
 # sequtils
 General purpose DNA/RNA sequence utilities
 
+
+## TODO
+I centralized functions in sequtils.py.  I need to rewrite scripts to use them
+
+
 ## grepseq
 search for regular expression in fasta file, return BED file of loci
 
@@ -9,3 +14,5 @@ get descriptive statistics of FASTA formatted file and filter FASTA formatted fi
 
 ## fasta2tab and tab2fasta
 Convert FASTA formatted files into tabular files and vice-versa.  Good for grepping or manipulating sequences using command line tools.
+
+
