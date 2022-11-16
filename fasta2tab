@@ -4,7 +4,6 @@
 # lmd: 2022-11-16
 from sequtils import *
 import fileinput
-import sys
 import signal
 
 ###############################################################################
