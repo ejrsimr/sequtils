@@ -7,12 +7,14 @@ from sequtils import *
 import pandas as pd
 from matplotlib import pyplot as plt
 import seaborn as sb
+import fileinput
 
 ###############################################################################
 ### MAIN ######################################################################
 ###############################################################################
 def main():
-    fasta = read_fasta(sys.stdin)
+    fh = fileinput.input()
+    fasta = read_fasta(fh)
     length_histogram(fasta, 100)
 
 ###############################################################################

@@ -5,14 +5,15 @@
 # OUTPUT: Table of sequence lengths
 
 from sequtils import *
-import sys
+import fileinput
 import signal
 
 ###############################################################################
 ### MAIN ######################################################################
 ###############################################################################
 def main():
-    fasta = read_fasta(sys.stdin)
+    fh = fileinput.input()
+    fasta = read_fasta(fh)
     print_lengths_table(fasta)
     
 ###############################################################################
