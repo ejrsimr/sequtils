@@ -116,6 +116,19 @@ def print_bed(bed):
     for name in bed:
         print("\t".join([bed[name]['chr'], bed[name]['start'], bed[name]['end'], name, bed[name]['score'], bed[name]['strand']]))
 
+###############################################################################
+# Filter FASTA File
+###############################################################################
+def filter_fasta(fasta, min_length, max_length, min_gc, max_gc):
+    fasta_out = {}
+
+    for header in fasta:
+        seqgc = calc_gc(fasta[header])
+        seqlen = len(fasta[header])
+        if seqgc >= min_gc & seqgc <= max_gc & seqlen >= min_length & seqlen <= max_length:
+            fasta_out[header] = fasta[header]
+    
+    return fasta_out
 
 ###############################################################################
 # Run MAIN
