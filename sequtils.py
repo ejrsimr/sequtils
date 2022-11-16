@@ -117,18 +117,69 @@ def print_bed(bed):
         print("\t".join([bed[name]['chr'], bed[name]['start'], bed[name]['end'], name, bed[name]['score'], bed[name]['strand']]))
 
 ###############################################################################
-# Filter FASTA File
+# Filter FASTA File by length and gc content
 ###############################################################################
 def filter_fasta(fasta, min_length, max_length, min_gc, max_gc):
     fasta_out = {}
 
     for header in fasta:
-        seqgc = calc_gc(fasta[header])
-        seqlen = len(fasta[header])
-        if seqgc >= min_gc & seqgc <= max_gc & seqlen >= min_length & seqlen <= max_length:
+        s_gc = calc_gc(fasta[header])
+        s_len = len(fasta[header])
+        if s_gc >= min_gc & s_gc <= max_gc & s_len >= min_length & s_len <= max_length:
             fasta_out[header] = fasta[header]
     
     return fasta_out
+
+###############################################################################
+# calculate GC content of sequence
+###############################################################################    
+def calc_gc(seq):
+    g = seq.count('G')
+    c = seq.count('C')
+    a = seq.count('A')
+    t = seq.count('T')
+    perc_gc = g + c / (g + c + a + t)
+
+    return(perc_gc)
+
+###############################################################################
+# Subset FASTA - require full header (fast)
+###############################################################################    
+def subset_fasta_full_header(fasta, seqs):
+    fasta_out = {}
+
+    for header in fasta:
+        if header in seqs:
+            fasta_out[header] = fasta[header]
+
+    return(fasta_out)
+
+###############################################################################
+# Subset FASTA - only startswith (slow)
+###############################################################################    
+def subset_fasta_start_of_header(fasta, seqs):
+    fasta_out = {}
+
+    for header in fasta:
+        for pattern in seqs:
+            if header.startswith(pattern):
+                fasta_out[header] = fasta[header]
+
+    return(fasta_out)
+
+###############################################################################
+# Subset FASTA - contains (slow)
+###############################################################################    
+def subset_fasta_start_of_header(fasta, seqs):
+    fasta_out = {}
+
+    for header in fasta:
+        for pattern in seqs:
+            if header.startswith(pattern):
+                fasta_out[header] = fasta[header]
+
+    return(fasta_out)
+
 
 ###############################################################################
 # Run MAIN
