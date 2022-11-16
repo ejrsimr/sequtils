@@ -60,7 +60,7 @@ def read_fasta(filename):
 
     for line in filename:
         line = line.rstrip()
-        if (line[0] == ">"):
+        if (line.startswith(">")):
             header = line[1:]
             fasta[header] = []
         else:

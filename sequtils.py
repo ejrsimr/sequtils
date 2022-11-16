@@ -20,7 +20,7 @@ def read_fasta(fh):
 
     for line in fh:
         line = line.rstrip()
-        if (line[0] == ">"):
+        if (line.startswith(">")):
             header = line[1:]
             fasta[header] = []
         else:
