@@ -24,14 +24,10 @@ def main():
 # Print table of GC content
 ###############################################################################
 def print_gc_table(fasta):
-    print("seq.id\tseq.gc")
+    print("seq_id\tseq_gc")
 
     for header in fasta:
-        seq = fasta[header].upper()
-        slen = float(len(seq))
-        g = float(seq.count('G'))
-        c = float(seq.count('C'))
-        gc = (g + c) / slen * 100
+        gc = calc_gc(fasta[header]) * 100
         print(header, "\t%0.2f" % gc)
 
 ###############################################################################

@@ -134,10 +134,11 @@ def filter_fasta(fasta, min_length, max_length, min_gc, max_gc):
 # calculate GC content of sequence
 ###############################################################################    
 def calc_gc(seq):
-    g = seq.count('G')
-    c = seq.count('C')
-    a = seq.count('A')
-    t = seq.count('T')
+    useq = seq.upper()
+    g = useq.count('G')
+    c = useq.count('C')
+    a = useq.count('A')
+    t = useq.count('T')
     perc_gc = g + c / (g + c + a + t)
 
     return(perc_gc)
@@ -145,7 +146,7 @@ def calc_gc(seq):
 ###############################################################################
 # Subset FASTA - require full header (fast)
 ###############################################################################    
-def subset_fasta_full_header(fasta, seqs):
+def subset_fasta_is(fasta, seqs):
     fasta_out = {}
 
     for header in fasta:
@@ -157,7 +158,7 @@ def subset_fasta_full_header(fasta, seqs):
 ###############################################################################
 # Subset FASTA - only startswith (slow)
 ###############################################################################    
-def subset_fasta_start_of_header(fasta, seqs):
+def subset_fasta_startswith(fasta, seqs):
     fasta_out = {}
 
     for header in fasta:
@@ -168,14 +169,14 @@ def subset_fasta_start_of_header(fasta, seqs):
     return(fasta_out)
 
 ###############################################################################
-# Subset FASTA - contains (slow)
+# Subset FASTA - contains (very slow)
 ###############################################################################    
-def subset_fasta_start_of_header(fasta, seqs):
+def subset_fasta_contains(fasta, seqs):
     fasta_out = {}
 
     for header in fasta:
         for pattern in seqs:
-            if header.startswith(pattern):
+            if pattern in header:
                 fasta_out[header] = fasta[header]
 
     return(fasta_out)
