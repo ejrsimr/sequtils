@@ -3,6 +3,7 @@
 # ejr: 2022-10-12
 # lmd: 2022-11-16
 from sequtils import *
+import fileinput
 import sys
 import signal
 
@@ -10,7 +11,8 @@ import signal
 ### MAIN ######################################################################
 ###############################################################################
 def main():
-    fasta = read_seqtable(sys.stdin)
+    fh = fileinput.input()
+    fasta = read_seqtable(fh)
     print_fasta(fasta)
 
 ###############################################################################
