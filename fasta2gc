@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-# search through fasta file for regular expression and output either a bed file or fasta file
-# ejr: 2022-09-27
-# lmd: 2022-11-16
-# INPUT: 
-#   FASTA FILE
-#   regular expression
-# OUTPUT:
-# BED file of matches
-# for git test
+# ejr - 2022-11-16
+# last update: 2022-11-16
+# INPUT: FASTA file on STDIN or with --file
+# OUTPUT: Table of sequence lengths
 
+###############################################################################
 ### IMPORT ####################################################################
+###############################################################################
+from sequtils import *
 import sys
 import argparse
 import signal
@@ -18,25 +16,29 @@ import signal
 ### MAIN ######################################################################
 ###############################################################################
 def main():
-    args = get_args()
-    fasta = read_fasta(args.file)
-    grep_regex(fasta, args.regex)
 
+    fasta = read_fasta(sys.stdin)
+    print_gc_table(fasta)
+    
 ###############################################################################
-# Get command-line arguments using argparse
+# Print table of GC content
 ###############################################################################
-def get_args():
-    parser = argparse.ArgumentParser(description="Grep sequence from FASTA")
-    # file defaults to stdin
-    parser.add_argument('--file', type = argparse.FileType('r'), default = sys.stdin, help = 'Input FASTA - defaults to STDIN')
-    parser.add_argument('--regex', type = str, default = '0', help = 'Regular expression to search for')
-    args = parser.parse_args()
+def print_gc_table(fasta):
+    print("seq.id\tseq.gc")
 
-    return args
+    for header in fasta:
+        seq = fasta[header].upper()
+        slen = float(len(seq))
+        g = float(seq.count('G'))
+        c = float(seq.count('C'))
+        gc = (g + c) / slen * 100
+        print(header, "\t%0.2f" % gc)
+
 ###############################################################################
 ### RUN MAIN ##################################################################
 ###############################################################################
 if __name__ == "__main__":
+
     # this catches sigpipe errors so you don't get an error message if you tail of head output
     signal.signal(signal.SIGPIPE, signal.SIG_DFL)
     main()

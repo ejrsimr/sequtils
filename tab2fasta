@@ -1,45 +1,22 @@
 #!/usr/bin/env python3
-# fasta2tab
+# tab2fasta
 # ejr: 2022-10-12
+# lmd: 2022-11-16
+from sequtils import *
 import sys
 import signal
 
-# MAIN
-def main(): 
-    fasta = read_table(sys.stdin)
+###############################################################################
+### MAIN ######################################################################
+###############################################################################
+def main():
+    fasta = read_seqtable(sys.stdin)
     print_fasta(fasta)
 
-# READ sequences table ROM STDIN (e.g. seqname\tsequence)
-def read_table(filename):
-    header = ""
-    fasta = {}
-
-    for line in filename:
-        line = line.rstrip()
-        fields = line.split("\t")
-        fasta[fields[0]] = fields[1]
-
-    return fasta
-
-# INSERT NEW LINES (for properly formatting fasta output)
-def insert_newlines(string, every=80):
-    lines = []
-
-    for i in range(0, len(string), every):
-        lines.append(string[i:i+every])
-
-    return '\n'.join(lines)
-
-# PRINT FASTA to STDOUT
-def print_fasta(fasta):
-    for header in fasta:
-        print(">", header, sep="")
-        print(insert_newlines(fasta[header]))
-
-# RUN MAIN 
+###############################################################################
+### RUN MAIN ##################################################################
+###############################################################################
 if __name__ == "__main__":
-
-     # this catches sigpipe errors so you don't get an error message if you tail of head output
-    signal.signal(signal.SIGPIPE, signal.SIG_DFL)
-    
+    # this catches sigpipe errors so you don't get an error message if you tail of head output
+    signal.signal(signal.SIGPIPE, signal.SIG_DFL) 
     main()
