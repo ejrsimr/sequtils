@@ -45,6 +45,18 @@ def read_seqtable(fh):
     return fasta
 
 ###############################################################################
+# Read file of sequence names and return list
+###############################################################################
+def read_seqlist(fh):
+    header = ""
+    seq_list = []
+
+    for line in fh:
+        line = line.rstrip()
+        seq_list.append(line)
+
+    return seq_list
+###############################################################################
 # Add newlines every 80 characters for FASTA formatting
 ###############################################################################
 def insert_newlines(string, every=80):
