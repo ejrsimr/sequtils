@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+# subset_fasta
+# ejr: 2022-10-12
+# lmd: 2022-11-16
+# extract sequences from fasta file based on file of ids
+from sequtils import *
+import signal
+import argparse
+
+###############################################################################
+### MAIN ######################################################################
+###############################################################################
+def main():
+    args = get_args()
+    fasta = read_fasta(args.fasta_file)
+    seqnames = read_seqlist(args.seq_list)
+
+    if args.contains:
+        subset_fasta = subset_fasta_contains(fasta, seqnames)
+    elif args.startswith:
+        subset_fasta = subset_fasta_startswith(fasta, seqnames)
+    else:
+        subset_fasta = subset_fasta_is(fasta, seqnames)
+
+    print_fasta(subset_fasta)
+
+###############################################################################
+# Get command-line arguments using argparse
+###############################################################################
+def get_args():
+    parser = argparse.ArgumentParser(description="Extract sequences from FASTA file")
+    # file defaults to stdin 
+    parser.add_argument('--fasta_file', type = argparse.FileType('r'), help = 'Input FASTA')
+    parser.add_argument('--seq_list', type = argparse.FileType('r'), help = 'Input file of sequence names')
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--startswith', help = 'FASTA entries must start with strings in seq_list', action="store_true")
+    group.add_argument('--contains', help = 'FASTA entries must CONTAIN string in seq_list', action="store_true")
+    args = parser.parse_args()
+
+    return args
+
+###############################################################################
+### RUN MAIN ##################################################################
+###############################################################################
+if __name__ == "__main__":
+    # this catches sigpipe errors so you don't get an error message if you tail of head output
+    signal.signal(signal.SIGPIPE, signal.SIG_DFL)
+    main()
