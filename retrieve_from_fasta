@@ -16,11 +16,15 @@ import fileinput
 def main():
     args = get_args()
     fasta = read_fasta(args.fasta)
-    if args.file:
-        patterns = read_patterns(args.file)
-    else:
-        patterns = [ args.p ]
 
+    # accept file of sequence names or a single name with -p
+    if args.file:
+        patterns = file_to_list(args.file)
+    else:
+        patterns = [ args.pattern ]
+
+    # for each type of search pass fasta dictionary, patterns list and T/F for 
+    # if you wish to exclude patterns.  True = exclude, False = include
     if args.contains:
         subset_fasta = subset_fasta_contains(fasta, patterns, args.exclude)
     elif args.startswith:

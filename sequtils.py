@@ -49,15 +49,14 @@ def read_seqtable(fh):
 ###############################################################################
 # Read file of sequence names or partial names and return list
 ###############################################################################
-def read_patterns(fh):
-    header = ""
-    patterns = []
+def file_to_list(fh):
+    out_list = []
 
     for line in fh:
         line = line.rstrip()
-        patterns.append(line)
+        out_list.append(line)
 
-    return patterns
+    return out_list
 
 ###############################################################################
 # Add newlines every 80 characters for FASTA formatting
