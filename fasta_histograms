@@ -26,9 +26,10 @@ def length_histogram(fasta, num_bins):
     df = pd.DataFrame(list(fasta.items()), columns = ['header','seq'])  
     df['length'] = df['seq'].apply(len)
 
-    len_hist = sb.histplot(data = df, x='length', bins=num_bins)
-    len_fig = len_hist.get_figure()
-    len_fig.savefig('length_histogram.png')  
+    hist = sb.histplot(data = df, x='length', bins=num_bins)
+    fig = hist.get_figure()
+    fig.savefig('length_histogram.png')  
+    fig.clear(True)
     
 ###############################################################################
 ### GC HISTOGRAM 
@@ -37,9 +38,10 @@ def gc_histogram(fasta, num_bins):
     df = pd.DataFrame(list(fasta.items()), columns = ['header','seq'])  
     df['gc'] = df['seq'].apply(calc_gc)
 
-    gc_hist = sb.histplot(data = df, x='gc', bins=num_bins)
-    gc_fig = gc_hist.get_figure()
-    gc_fig.savefig('gc_histogram.png')
+    hist = sb.histplot(data = df, x='gc', binrange=(.01, 1), bins=num_bins)
+    fig = hist.get_figure()
+    fig.savefig('gc_histogram.png')
+    fig.clear(True)
 
 ###############################################################################
 ### RUN MAIN 
