@@ -1,5 +1,5 @@
 # sequtils
-created by: ejr
+created by: ejr  
 last modified date: 2022-11-17  
 
 General purpose DNA/RNA sequence utilities
