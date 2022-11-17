@@ -8,14 +8,18 @@
 from sequtils import *
 import signal
 import argparse
+import fileinput
 
 ###############################################################################
 ### MAIN ######################################################################
 ###############################################################################
 def main():
     args = get_args()
-    fasta = read_fasta(args.fasta_file)
-    patterns = read_patterns(args.patterns)
+    fasta = read_fasta(args.fasta)
+    if args.file:
+        patterns = read_patterns(args.file)
+    else:
+        patterns = [ args.p ]
 
     if args.contains:
         subset_fasta = subset_fasta_contains(fasta, patterns, args.exclude)
@@ -32,12 +36,16 @@ def main():
 def get_args():
     parser = argparse.ArgumentParser(description="Extract sequences from FASTA file")
     # file defaults to stdin 
-    parser.add_argument('--fasta_file', type = argparse.FileType('r'), help = 'Input FASTA')
-    parser.add_argument('--patterns', type = argparse.FileType('r'), help = 'Input file of sequence names or partial names')
+    parser.add_argument('--fasta', type = argparse.FileType('r'), help = 'Input file of sequence names or partial names')
     parser.add_argument('--exclude', help = 'Exclude instead of include sequences with pattern in name', action="store_true")
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument('--startswith', help = 'FASTA entries must START WITH strings in seq_list', action="store_true")
-    group.add_argument('--contains', help = 'FASTA entries must CONTAIN string in seq_list', action="store_true")
+
+    group1 = parser.add_mutually_exclusive_group()
+    group1.add_argument('-f', '--file', type = argparse.FileType('r'), help = 'Input file of sequence names or partial names')
+    group1.add_argument('-p', '--pattern', help = 'Single sequence name or partial name')
+
+    group2 = parser.add_mutually_exclusive_group()
+    group2.add_argument('--startswith', help = 'FASTA entries must START WITH strings in seq_list', action="store_true")
+    group2.add_argument('--contains', help = 'FASTA entries must CONTAIN string in seq_list', action="store_true")
     args = parser.parse_args()
 
     return args
