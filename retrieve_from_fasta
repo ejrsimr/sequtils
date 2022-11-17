@@ -3,6 +3,8 @@
 # ejr: 2022-10-12
 # lmd: 2022-11-16
 # extract sequences from fasta file based on file of ids
+# this is not as efficient as index based tools, but allows for pattern matching
+# and exclusion.
 from sequtils import *
 import signal
 import argparse
@@ -16,7 +18,7 @@ def main():
     patterns = read_patterns(args.patterns)
 
     if args.contains:
-            subset_fasta = subset_fasta_contains(fasta, patterns, args.exclude)
+        subset_fasta = subset_fasta_contains(fasta, patterns, args.exclude)
     elif args.startswith:
         subset_fasta = subset_fasta_startswith(fasta, patterns, args.exclude)
     else:
@@ -31,10 +33,10 @@ def get_args():
     parser = argparse.ArgumentParser(description="Extract sequences from FASTA file")
     # file defaults to stdin 
     parser.add_argument('--fasta_file', type = argparse.FileType('r'), help = 'Input FASTA')
-    parser.add_argument('--patterns', type = argparse.FileType('r'), help = 'Input file of sequence names')
-    parser.add_argument('--exclude', help = 'Exclude instead of include sequences with pattern', action="store_true")
+    parser.add_argument('--patterns', type = argparse.FileType('r'), help = 'Input file of sequence names or partial names')
+    parser.add_argument('--exclude', help = 'Exclude instead of include sequences with pattern in name', action="store_true")
     group = parser.add_mutually_exclusive_group()
-    group.add_argument('--startswith', help = 'FASTA entries must start with strings in seq_list', action="store_true")
+    group.add_argument('--startswith', help = 'FASTA entries must START WITH strings in seq_list', action="store_true")
     group.add_argument('--contains', help = 'FASTA entries must CONTAIN string in seq_list', action="store_true")
     args = parser.parse_args()
 

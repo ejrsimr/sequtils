@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # ejr: 2022-11-10
-# lmd: 2022-11-10
+# lmd: 2022-11-16
 # collection of functions for FASTA and sequence manipulation
 
 import os
@@ -20,11 +20,13 @@ def read_fasta(fh):
 
     for line in fh:
         line = line.rstrip()
+        # starts with handles blank lines better than line[0]
         if (line.startswith(">")):
             header = line[1:]
             fasta[header] = []
         else:
             fasta[header].append(line)
+    # append is more efficient that string concatenation
     for header in fasta:
         fasta[header] = ''.join(fasta[header])
 
@@ -45,7 +47,7 @@ def read_seqtable(fh):
     return fasta
 
 ###############################################################################
-# Read file of sequence names or name patterns and return list
+# Read file of sequence names or partial names and return list
 ###############################################################################
 def read_patterns(fh):
     header = ""
@@ -56,6 +58,7 @@ def read_patterns(fh):
         patterns.append(line)
 
     return patterns
+
 ###############################################################################
 # Add newlines every 80 characters for FASTA formatting
 ###############################################################################
@@ -143,7 +146,7 @@ def filter_fasta(fasta, min_length, max_length, min_gc, max_gc):
     return fasta_out
 
 ###############################################################################
-# calculate GC content of sequence
+# calculate GC content of sequence - returns percentage in decimal (e.g. 0.21)
 ###############################################################################    
 def calc_gc(seq):
     useq = seq.upper()
@@ -156,9 +159,11 @@ def calc_gc(seq):
     return(perc_gc)
 
 ###############################################################################
-# Subset FASTA - require full header (fast)
+# Subset FASTA - require full header (fast) - returns FASTA dictionary
 ###############################################################################    
 def subset_fasta_is(fasta, names_list, exclude):
+    # this is faster than pattern matching, but on big FASTA files, this
+    # will be a lot slower than indexed retrieval
     fasta_out = {}
 
     if exclude == True:
@@ -174,11 +179,12 @@ def subset_fasta_is(fasta, names_list, exclude):
     return(fasta_out)
 
 ###############################################################################
-# Subset FASTA - only startswith (slow)
+# Subset FASTA - only startswith (slow) - returns FASTA dictionary
 ###############################################################################    
 def subset_fasta_startswith(fasta, names_list, exclude):
     fasta_out = {}
 
+    # for exclusions we need a full list and not just partials
     match_list = []
     for header in fasta:
         for pattern in names_list:
@@ -196,11 +202,12 @@ def subset_fasta_startswith(fasta, names_list, exclude):
     return(fasta_out)
 
 ###############################################################################
-# Subset FASTA - contains (very slow)
+# Subset FASTA - contains (very slow) - returns FASTA dictionary
 ###############################################################################    
 def subset_fasta_contains(fasta, names_list, exclude):
     fasta_out = {}
 
+    # for exclusions we need a full list and not just partials
     match_list = []
     for header in fasta:
         for pattern in names_list:
