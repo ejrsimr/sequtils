@@ -139,7 +139,7 @@ def calc_gc(seq):
     c = useq.count('C')
     a = useq.count('A')
     t = useq.count('T')
-    perc_gc = g + c / (g + c + a + t)
+    perc_gc = (g + c) / (g + c + a + t)
 
     return(perc_gc)
 

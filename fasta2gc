@@ -26,7 +26,7 @@ def print_gc_table(fasta):
     print("seq_id\tseq_gc")
 
     for header in fasta:
-        gc = calc_gc(fasta[header]) * 100
+        gc = calc_gc(fasta[header]) * 100 
         print(header, "\t%0.2f" % gc)
 
 ###############################################################################
