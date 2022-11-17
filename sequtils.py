@@ -45,17 +45,17 @@ def read_seqtable(fh):
     return fasta
 
 ###############################################################################
-# Read file of sequence names and return list
+# Read file of sequence names or name patterns and return list
 ###############################################################################
-def read_seqlist(fh):
+def read_patterns(fh):
     header = ""
-    seq_list = []
+    patterns = []
 
     for line in fh:
         line = line.rstrip()
-        seq_list.append(line)
+        patterns.append(line)
 
-    return seq_list
+    return patterns
 ###############################################################################
 # Add newlines every 80 characters for FASTA formatting
 ###############################################################################
