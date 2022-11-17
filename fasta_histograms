@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # ejr: 2022-11-10
-# lmd: 2022-11-10
-# generate histogram of sequences lengths from FASTA file
+# lmd: 2022-11-16
+# generate histogram of sequences lengths and gc content from FASTA file
 
 from sequtils import *
 import pandas as pd
@@ -10,15 +10,16 @@ import seaborn as sb
 import fileinput
 
 ###############################################################################
-### MAIN ######################################################################
+### MAIN 
 ###############################################################################
 def main():
     fh = fileinput.input()
     fasta = read_fasta(fh)
     length_histogram(fasta, 100)
+    gc_histogram(fasta, 100)
 
 ###############################################################################
-### LENGTH HISTOGRAM ##########################################################
+### LENGTH HISTOGRAM 
 ###############################################################################
 def length_histogram(fasta, num_bins):
     
@@ -30,7 +31,19 @@ def length_histogram(fasta, num_bins):
     fig.savefig('length_histogram.png')  
     
 ###############################################################################
-### RUN MAIN ##################################################################
+### GC HISTOGRAM 
+###############################################################################
+def gc_histogram(fasta, num_bins):
+    
+    df = pd.DataFrame(list(fasta.items()), columns = ['header','seq'])  
+    df['length'] = df['seq'].apply(calc_gc)
+
+    hist = sb.histplot(data = df, x='length', bins=num_bins)
+    fig = hist.get_figure()
+    fig.savefig('gc_histogram.png')
+
+###############################################################################
+### RUN MAIN 
 ###############################################################################
 if __name__ == "__main__":
     signal.signal(signal.SIGPIPE, signal.SIG_DFL)
