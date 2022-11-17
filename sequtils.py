@@ -158,38 +158,62 @@ def calc_gc(seq):
 ###############################################################################
 # Subset FASTA - require full header (fast)
 ###############################################################################    
-def subset_fasta_is(fasta, seqs):
+def subset_fasta_is(fasta, names_list, exclude):
     fasta_out = {}
 
-    for header in fasta:
-        if header in seqs:
-            fasta_out[header] = fasta[header]
+    if exclude == True:
+        for header in fasta:
+            if header not in names_list: 
+                fasta_out[header] = fasta[header]
+
+    else:
+        for header in fasta:
+            if header in names_list:
+                fasta_out[header] = fasta[header]
 
     return(fasta_out)
 
 ###############################################################################
 # Subset FASTA - only startswith (slow)
 ###############################################################################    
-def subset_fasta_startswith(fasta, seqs):
+def subset_fasta_startswith(fasta, names_list, exclude):
     fasta_out = {}
 
+    match_list = []
     for header in fasta:
-        for pattern in seqs:
+        for pattern in names_list:
             if header.startswith(pattern):
+                match_list.append(header)
+
+    if exclude == True:
+        for header in fasta:
+            if header not in match_list:
                 fasta_out[header] = fasta[header]
+    else:
+        for header in match_list:
+            fasta_out[header] = fasta[header]
 
     return(fasta_out)
 
 ###############################################################################
 # Subset FASTA - contains (very slow)
 ###############################################################################    
-def subset_fasta_contains(fasta, seqs):
+def subset_fasta_contains(fasta, names_list, exclude):
     fasta_out = {}
 
+    match_list = []
     for header in fasta:
-        for pattern in seqs:
+        for pattern in names_list:
             if pattern in header:
+                match_list.append(header)
+
+    if exclude == True:
+        for header in fasta:
+            if header not in match_list:
                 fasta_out[header] = fasta[header]
+    else:
+        for header in match_list:
+            fasta_out[header] = fasta[header]
 
     return(fasta_out)
 
