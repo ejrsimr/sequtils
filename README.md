@@ -7,7 +7,7 @@ General purpose DNA/RNA sequence utilities. Some of these are my own implementat
 ## fasta_filter
 Filter FASTA file for length and gc content.  
 
-## fasta_grep
+## fasta_regex
 Search for regular expression in fasta file, return BED file of loci.  
 
 ## fasta_retrieve
@@ -30,6 +30,9 @@ Get table of per sequence lengths from FASTA formatted file.
 
 ## fasta2tab 
 Convert FASTA formatted files to tabular format.  
+
+## fasta_itrs
+Experimental: find ITRs in FASTA file. return BED.  
 
 ## tab2fasta
 Convert tabular sequence data to FASTA format.  
