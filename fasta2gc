@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-# ejr - 2022-11-16
-# last update: 2022-11-16
-# INPUT: FASTA file on STDIN or with --file
-# OUTPUT: Table of sequence lengths
+# fasta2gc
+# generate table of gc content for each sequence in FASTA file.
+# ejr: 2022-11-16
+# lmd: 2022-11-17
 
 ###############################################################################
 ### IMPORT ####################################################################
 ###############################################################################
-from sequtils import *
+from fasta_utils import *
 import fileinput
 import signal
 
