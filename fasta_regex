@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# fasta_grep
+# fasta_regex
 # search through fasta file for regular expression and output either a bed file or fasta file
 # ejr: 2022-09-27
 # lmd: 2022-11-16
