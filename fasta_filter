@@ -25,10 +25,10 @@ def get_args():
     parser = argparse.ArgumentParser(description="Filter sequences from FASTA")
     # file defaults to stdin
     parser.add_argument('--file', type = argparse.FileType('r'), default = sys.stdin, help = 'Input FASTA - defaults to STDIN')
-    parser.add_argument('--min_len', type = str, default = '1', help = 'Minimum sequence length')
-    parser.add_argument('--max_len', type = str, default = '10000000000', help = 'Maximum sequence length')
-    parser.add_argument('--min_gc',  type = str, default = '0', help = 'Minimum %GC')
-    parser.add_argument('--max_gc',  type = str, default = '1', help = 'Maximum %GC')
+    parser.add_argument('--min_len', type = int, default = '1', help = 'Minimum sequence length')
+    parser.add_argument('--max_len', type = int, default = '10000000000', help = 'Maximum sequence length')
+    parser.add_argument('--min_gc',  type = float, default = '0', help = 'Minimum %GC')
+    parser.add_argument('--max_gc',  type = float, default = '1', help = 'Maximum %GC')
     args = parser.parse_args()
 
     return args
@@ -42,7 +42,7 @@ def filter_fasta(fasta, min_len, max_len, min_gc, max_gc):
     for header in fasta:
         s_gc = calc_gc(fasta[header])
         s_len = len(fasta[header])
-        if s_gc >= min_gc & s_gc <= max_gc & s_len >= min_length & s_len <= max_length:
+        if s_gc >= min_gc and s_gc <= max_gc and s_len >= min_len and s_len <= max_len:
             fasta_out[header] = fasta[header]
     
     return fasta_out

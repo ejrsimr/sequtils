@@ -39,7 +39,7 @@ def grep_regex(fasta, regex):
         seqlen = len(fasta[header])
         # forward matches
         for match in finditer(regex, fasta[header]):
-            name = header + ":" + start + "-" + end
+            name = header + ":" + str(match.start()) + "-" + str(match.end())
             bed[name] = {}
             bed[name]['start'] = str(match.start())
             bed[name]['end'] = str(match.end())
@@ -50,7 +50,7 @@ def grep_regex(fasta, regex):
         # reverse complement matches
         rc = reverse_complement(fasta[header])
         for match in finditer(regex, rc):
-            name = header + ":" + start + "-" + end
+            name = header + ":" + str(seqlen - match.end()) + "-" + str(seqlen - match.start())
             bed[name] = {}
             bed[name]['start'] = str(seqlen - match.end())
             bed[name]['end'] = str(seqlen - match.start())
